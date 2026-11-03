@@ -30,31 +30,37 @@
 \titleformat{\subsubsection}{\itshape\normalsize}{}{0em}{}
 \titlespacing*{\section}{0pt}{5pt}{2pt}
 \titlespacing*{\subsection}{0pt}{4pt}{1pt}
-\captionsetup{font=footnotesize,labelfont=bf,labelsep=period,justification=justified,singlelinecheck=false}
+\captionsetup{font=footnotesize,labelfont=bf,labelsep=space,justification=justified,singlelinecheck=false}
+\renewcommand{\figurename}{Fig.}
 
 \pagestyle{plain}
 
 \newcommand{\vect}[1]{\boldsymbol{#1}}
 \newcommand{\figpath}{figures}
+\hypersetup{
+  pdftitle={SparkSense: Addressing Operating and Sensor Variability through Profile Guided Edge Anomaly Detection for Condition Monitoring of AC and DC Motors},
+  pdfauthor={K. Rajeswari; S. Shrikanth; R. Mageshwar},
+  pdfsubject={Motor condition monitoring and edge anomaly detection},
+  pdfkeywords={AC and DC motors, condition monitoring, edge anomaly detection, motor profile, signal integrity, vibration analysis}
+}
 
 \begin{document}
 
 \twocolumn[
 \begin{@twocolumnfalse}
 \begin{center}
-{\fontsize{19}{21}\selectfont SparkSense: Addressing Operating and Sensor Variability with Motor Profile Guided Edge Anomaly Detection for AC and DC Motor Condition Monitoring\par}
+{\fontsize{19}{21}\selectfont SparkSense: Addressing Operating and Sensor Variability through Profile Guided Edge Anomaly Detection for Condition Monitoring of AC and DC Motors\par}
 \vspace{0.12in}
-{\large\textbf{K. Rajeswari}$^{*}$\par}
-{\small Associate Professor, rajeswari@msec.edu.in\par}
+{\large\textbf{K. Rajeswari}\par}
+{\small Associate Professor and corresponding author, rajeswari@msec.edu.in\par}
 \vspace{0.025in}
-{\large\textbf{S. Shrikanth}$^{1}$\par}
+{\large\textbf{S. Shrikanth}\par}
 {\small Final Year B.E. EEE Student, 311523105043@msec.edu.in\par}
 \vspace{0.025in}
-{\large\textbf{R. Mageshwar}$^{2}$\par}
+{\large\textbf{R. Mageshwar}\par}
 {\small Final Year B.E. EEE Student, 311523105023@msec.edu.in\par}
 \vspace{0.035in}
 {\small Department of Electrical and Electronics Engineering, Meenakshi Sundararajan Engineering College, Chennai, Tamil Nadu 600119, India\par}
-{\small $^{*}$Corresponding author. $^{1,2}$Final year undergraduate authors.\par}
 \vspace{0.08in}
 \end{center}
 \end{@twocolumnfalse}
@@ -86,7 +92,7 @@ Vibration, motor current, temperature, and acoustic measurements reveal differen
 TinyML moves preprocessing and inference close to a sensor, which can reduce communication demand and preserve local operation during outages \cite{warden2019}. Quantized networks can reduce weight storage by representing weights and activations as integers \cite{jacob2018}. A valid device claim still requires measured memory, timing, power, sampling behavior, and numerical agreement on the target hardware. This study evaluates host based integer arithmetic and therefore reports algorithmic agreement only.
 
 \subsection{Position of the present work}
-Published edge monitors commonly emphasize laboratory classification accuracy, response time, or system integration \cite{arciniegas2025}. SparkSense instead tests a failure mode that an aggregate accuracy can hide: a healthy gain or noise shift can trigger the same decision as a simulated mechanical fault. Table~\ref{tab:position} states the evidence boundary explicitly.
+Published edge monitors commonly emphasize laboratory classification accuracy, response time, or system integration \cite{arciniegas2025}. SparkSense instead tests a failure mode that an aggregate accuracy can hide: a healthy gain or noise shift can trigger the same decision as a simulated mechanical fault. Table~\ref{tab:position} states the evidence boundary explicitly, and Table~\ref{tab:literature} compares that position with representative literature.
 
 Signal based reviews of induction motor diagnosis group current, vibration, acoustic, thermal, and flux measurements according to the fault mechanisms they can reveal \cite{gangsar2020}. Deep learning reviews likewise emphasize that model capacity does not remove the need for representative operating conditions and independent evaluation \cite{zhao2019}. TensorFlow Lite Micro provides a practical inference runtime for microcontrollers, but its published resource results cannot be transferred to a different network and board without measurement \cite{david2021}. These observations motivate the conservative comparison used here: every learned detector is assessed beside an amplitude threshold and every claimed hardware function is separated from the host computation that was actually executed.
 
@@ -136,8 +142,8 @@ SparkSense assigns each asset a nameplate profile and makes the first alarm deci
 
 \begin{figure}[t]
 \centering
-\includegraphics[width=\columnwidth]{\figpath/rId22.png}
-\caption{SparkSense functional architecture. The selected motor profile determines the electrical and mechanical context used for local feature extraction and anomaly evaluation. Time stamped event records are retained during communication outages and forwarded after connectivity is restored. Quantitative evaluation covers the controlled motor profile processing path and the host implemented event queue.}
+\includegraphics[width=\columnwidth]{\figpath/Fig1.png}
+\caption{SparkSense functional architecture. The selected motor profile determines the electrical and mechanical context used for local feature extraction and anomaly evaluation. Time stamped event records are retained during communication outages and forwarded after connectivity is restored. Quantitative evaluation covers the controlled motor profile processing path and the host implemented event queue}
 \label{fig:architecture}
 \end{figure}
 
@@ -145,8 +151,8 @@ The laboratory breadboard in Fig.~\ref{fig:prototype} records an early stage of 
 
 \begin{figure}[t]
 \centering
-\includegraphics[width=0.92\columnwidth]{\figpath/image1.png}
-\caption{SparkSense laboratory breadboard assembled during preliminary system integration. The arrangement includes the controller, sensing interfaces, storage connection, and status indicators. The photograph documents the prototype architecture; the quantitative results are derived from the controlled motor profile evaluation and independently measured vibration recordings described in Section~5.}
+\includegraphics[width=0.92\columnwidth]{\figpath/Fig2.png}
+\caption{SparkSense laboratory breadboard assembled during preliminary system integration. The arrangement includes the controller, sensing interfaces, storage connection, and status indicators. The photograph documents the prototype architecture; the quantitative results are derived from the controlled motor profile evaluation and independently measured vibration recordings described in Section~\ref{sec:methods}}
 \label{fig:prototype}
 \end{figure}
 
@@ -177,6 +183,7 @@ Equipment integrator; configurable monitoring module for an original equipment m
 The target asset should have repeatable stable operating states, accessible nonhazardous sensor mounting, and a maintenance process able to investigate alerts. Variable speed assets require measured speed or a trustworthy controller command. SparkSense is unsuitable as the sole monitor for personnel safety, hazardous area compliance, emergency shutdown, or high consequence protection. Those applications require certified instrumentation, redundancy, and an engineering safety assessment beyond this study.
 
 \section{Methods}
+\label{sec:methods}
 \subsection{Motor profiles}
 The generator represents steady operating points and omits startup, switching transients, saturation, and inverter harmonics. For the balanced three phase induction profile, the simplified per phase equivalent neglects magnetizing current. With RMS voltage $V$, stator resistance $r$, referred rotor resistance $R$, leakage reactance $X$, synchronous angular speed $\omega_s$, and slip $s$, the load torque and rotor speed are
 \begin{equation}
@@ -184,15 +191,18 @@ T_L=\frac{3V^2(R/s)}{\omega_s\left[(r+R/s)^2+X^2\right]},\qquad
 \omega=(1-s)\omega_s .
 \label{eq:ac}
 \end{equation}
-The low slip branch is used and the phase current magnitude is $V/\sqrt{(r+R/s)^2+X^2}$.
+The low slip branch of Eq.~\eqref{eq:ac} is used and the phase current magnitude is $V/\sqrt{(r+R/s)^2+X^2}$.
 
-For the series DC profile, unsaturated flux is taken as proportional to current and losses other than series resistance are neglected:
+For the series DC profile, unsaturated flux is taken as proportional to current and losses other than series resistance are neglected. In SI form, the torque and back electromotive force constants are equal; combining either constant with the flux proportionality coefficient gives the positive coefficient $K$ used below:
 \begin{equation}
-T_L=KI^2,\quad V=R_sI+KI\omega,\quad
-I=\sqrt{T_L/K},\quad \omega=\frac{V-R_sI}{KI}.
+\begin{aligned}
+T_L &= K I^2, & V &= R_s I + K I\omega,\\
+I &= \sqrt{\frac{T_L}{K}}, &
+\omega &= \frac{V-R_s I}{K I}.
+\end{aligned}
 \label{eq:dc}
 \end{equation}
-Base loads are 0.55, 1.00, and 1.45 N m. The AC profile uses 45 V per phase, 50 Hz, a 25 Hz synchronous shaft frequency, and nominal parameters $r=0.72~\Omega$, $R=0.50~\Omega$, and $X=2.3~\Omega$. The DC profile uses 24 V, $R_s=1.2~\Omega$, and $K=0.10$ in the adopted SI equations. Three independent factors drawn uniformly from 0.88 to 1.12 perturb circuit and vibration parameters for each virtual unit. These are illustrative machines, not calibrated replicas.
+Equation~\eqref{eq:dc} supplies the DC current and speed for each imposed load. Base loads are 0.55, 1.00, and 1.45 N m. The AC profile uses 45 V per phase, 50 Hz, a 25 Hz synchronous shaft frequency, and nominal parameters $r=0.72~\Omega$, $R=0.50~\Omega$, and $X=2.3~\Omega$. The DC profile uses 24 V, $R_s=1.2~\Omega$, and $K=0.10$ in the adopted SI equations. Three independent factors drawn uniformly from 0.88 to 1.12 perturb circuit and vibration parameters for each virtual unit. These are illustrative machines, not calibrated replicas.
 
 \subsection{Observations and interventions}
 Each case contains one second of current and vibration. AC current is sinusoidal. DC current contains 3.5 percent ripple at six times shaft frequency. At shaft angle $\theta=\omega t$, nominal vibration is
@@ -201,32 +211,32 @@ x(t)=\left(0.14c+0.02T_L\right)\sin(\theta+0.1)
 +0.045\sin(2\theta)+\epsilon(t),
 \label{eq:vib}
 \end{equation}
-where $c$ is a unit specific vibration factor and $\epsilon$ is Gaussian noise with standard deviation 0.026 in arbitrary amplitude units. Drag increases effective torque by 30 percent without changing the nominal command. Imbalance adds a first shaft order component with amplitude 0.17. Healthy stress tests apply a vibration gain of 1.65 or additional broadband noise with standard deviation 0.125. Paired base draws are reused across interventions. These magnitudes are test conditions, not measured fault severities or occurrence probabilities.
+where $c$ is a unit specific vibration factor and $\epsilon$ is Gaussian noise with standard deviation 0.026 in arbitrary amplitude units. Equation~\eqref{eq:vib} defines the common nominal waveform before interventions are applied. Drag increases effective torque by 30 percent without changing the nominal command. Imbalance adds a first shaft order component with amplitude 0.17. Healthy stress tests apply a vibration gain of 1.65 or additional broadband noise with standard deviation 0.125. Paired base draws are reused across interventions. These magnitudes are test conditions, not measured fault severities or occurrence probabilities.
 
 \subsection{Local and remote inference}
 The local input is current RMS, shaft frequency, a temperature proxy, vibration RMS, and the logarithm of the vibration power fraction from 100 to 799 Hz. Vibration is demeaned, a Hann window is applied to limit spectral leakage \cite{harris1978}, and the five features are standardized using healthy fitting data only. The autoencoder has five inputs, two rectified hidden units, and five linear outputs. For standardized input $\vect{z}$ and reconstruction $\hat{\vect{z}}$, an alarm occurs when
 \begin{equation}
-S(\vect{z})=\frac{1}{5}\lVert\vect{z}-\hat{\vect{z}}\rVert_2^2>\tau .
+S(\vect{z})=\frac{1}{5}\left\lVert\vect{z}-\hat{\vect{z}}\right\rVert_2^2>\tau .
 \label{eq:score}
 \end{equation}
-The threshold is the larger empirical 95th percentile from separate healthy calibration groups. Shared and profile specific models are compared with a simple upper vibration RMS threshold. In the host quantizer, weights and input and hidden activations use signed eight bit values, while matrix products accumulate in 32 bit integers. Biases use accumulator units. Scale application and final scoring remain floating point. TensorFlow Lite Micro is a suitable deployment runtime \cite{david2021}, but no claim is made here for its timing, SRAM, power, or numerical equivalence on the proposed board.
+The score in Eq.~\eqref{eq:score} is compared with the larger empirical 95th percentile from separate healthy calibration groups. Shared and profile specific models are compared with a simple upper vibration RMS threshold. In the host quantizer, weights and input and hidden activations use signed eight bit values, while matrix products accumulate in 32 bit integers. Biases use accumulator units. Scale application and final scoring remain floating point. TensorFlow Lite Micro is a suitable deployment runtime \cite{david2021}, but no claim is made here for its timing, SRAM, power, or numerical equivalence on the proposed board.
 
 A remote Random Forest with 80 trees is trained separately for each motor profile on labelled synthetic healthy, drag, and imbalance cases \cite{breiman2001}. It is evaluated on every nominal test example. Its confusion matrix therefore measures standalone generator classification, not complete alert recall. The AI4I dataset is not used because its tabular labels do not match the waveform inputs or motor states evaluated here.
 
 \subsection{Operational decision policy}
 A deployable monitor needs more than an anomaly threshold because invalid acquisition and operation outside the commissioned domain can produce large scores. SparkSense therefore specifies four mutually exclusive output states: valid normal, valid anomaly, sensor or acquisition issue, and outside commissioned operation. Let $q_t$ be one only when sampling continuity, clipping, sensor range, and required context checks pass for window $t$. Let $c_t$ be the current load and speed cell, and let $\mathcal{C}_p$ be the commissioned cells for motor profile $p$. The valid anomaly indicator is
 \begin{equation}
-a_t=\mathbb{1}\!\left[q_t=1,\ c_t\in\mathcal{C}_p,\ S(\vect{z}_t)>\tau_{p,c_t}\right].
+a_t=\mathbb{1}\!\left\{q_t=1\ \land\ c_t\in\mathcal{C}_p\ \land\ S(\vect{z}_t)>\tau_{p,c_t}\right\}.
 \label{eq:policy}
 \end{equation}
-If $q_t=0$, the event is labelled as an acquisition issue rather than a motor fault. If $c_t\notin\mathcal{C}_p$, SparkSense abstains and requests additional healthy commissioning data. Only a valid window inside the commissioned domain can be labelled normal or anomalous.
+Equation~\eqref{eq:policy} assigns a valid anomaly only when all three conditions hold. If $q_t=0$, the event is labelled as an acquisition issue rather than a motor fault. If $c_t\notin\mathcal{C}_p$, SparkSense abstains and requests additional healthy commissioning data. Only a valid window inside the commissioned domain can be labelled normal or anomalous.
 
-An operational alert may require $m$ anomalous decisions among the most recent $n$ valid windows:
+An operational alert may require $m$ anomalous decisions among the most recent $n$ decision windows:
 \begin{equation}
-E_t=\mathbb{1}\!\left[\sum_{j=0}^{n-1}a_{t-j}\ge m\right].
+E_t=\mathbb{1}\!\left\{\sum_{j=0}^{n-1}a_{t-j}\ge m\right\}.
 \label{eq:persistence}
 \end{equation}
-The pair $(m,n)$ controls persistence and latency and must be fixed using time ordered pilot data. It is not selected from the balanced cases reported here. Every event record retains $q_t$, $c_t$, the score, threshold, model version, and reason code so that an alert can be audited. This policy is an operational specification derived from the observed disturbance failures; its field effectiveness remains to be measured.
+The persistence rule in Eq.~\eqref{eq:persistence} uses the pair $(m,n)$ to control persistence and latency; both values must be fixed using time ordered pilot data. It is not selected from the balanced cases reported here. Every event record retains $q_t$, $c_t$, the score, threshold, model version, and reason code so that an alert can be audited. This policy is an operational specification derived from the observed disturbance failures; its field effectiveness remains to be measured.
 
 \subsection{Partitions and uncertainty}
 For each profile, 12 virtual units supply fitting data, 8 different units supply healthy calibration, and 12 further units supply test cases. Three loads and two repeats produce 72 test cases for each state and profile. Unit parameters remain fixed across records. Counts are descriptive because 72 records represent repeated measurements from 12 virtual units, not 72 independent machines. Block bootstrap intervals resample the 12 test units and hold fitted weights fixed.
@@ -246,7 +256,7 @@ The disturbance tests are treated as negative controls. Increased gain changes a
 \subsection{Exploratory harmonic comparator}
 At known shaft speed, least squares sine and cosine fits estimate first and second shaft order amplitudes, $A_1$ and $A_2$. For common positive sensor gain $g$,
 \begin{equation}
-\frac{gA_1}{gA_2}=\frac{A_1}{A_2},\qquad A_2\ne0.
+\frac{gA_1}{gA_2}=\frac{A_1}{A_2},\qquad g>0,\quad A_2>0.
 \label{eq:ratio}
 \end{equation}
 The ratio can preserve a relative first order change while cancelling common gain. It fails under clipping, frequency dependent response, or unreliable speed. The comparator uses the largest standardized deviation among current RMS, shaft frequency, and the logarithm of $A_1/A_2$. Healthy statistics and thresholds are fitted separately by motor profile and commanded load. The rule was designed after inspection and is structurally matched to the generator. It is an explanatory comparator, not an independently validated fault detector.
@@ -255,7 +265,7 @@ The ratio can preserve a relative first order change while cancelling common gai
 The University of Ottawa archive provides vibration recordings from identified bearings under constant load and speed \cite{sehri2023data,sehri2023dataset}. The available archive contained 56 files from 20 bearings. Acceleration sampled at 42 kHz was filtered and resampled to 2 kHz, then divided into ten one second windows. Median window RMS and logarithmic band power fraction produced one vector per recording. Each fold excluded every state of its test bearing, fitted on ten other healthy bearings, and set its threshold using the maximum score from nine further healthy bearings. A two input, one hidden unit model was used because simultaneous SparkSense current, speed, and temperature were unavailable. Four cage fault files for bearings 19 and 20 were absent. Ball fault records were evaluated separately because their applied load differed from the matched load task.
 
 \subsection{Computational reproducibility and author verification}
-The controlled generator, feature extraction, unit assignments, thresholds, recording level decisions, and plotting procedures are retained in the supplementary research package. Random seeds and intervention magnitudes are fixed in the supplied configuration. AI assisted tools were used during code development, execution support, figure preparation, and language revision. The authors remain responsible for the experimental design, execution records, numerical verification, interpretation, citations, and final manuscript. No generated text or model output is treated as experimental evidence.
+The controlled generator, feature extraction, unit assignments, thresholds, recording level decisions, and plotting procedures are retained in the supplementary research package. Random seeds and intervention magnitudes are fixed in the supplied configuration. The authors defined the research question and methodology, performed and verified the analyses, interpreted the results, checked the citations, and approved the final manuscript. No language model output is treated as experimental evidence.
 
 \section{Results}
 \subsection{Simulated local decisions}
@@ -292,8 +302,8 @@ The results also define what additional healthy data would be valuable. Repeatin
 
 \begin{figure*}[t]
 \centering
-\includegraphics[width=0.91\textwidth]{\figpath/rId27.png}
-\caption{Alarm counts for matched controlled operating cases. Each heatmap cell reports alarms among 72 observations. Healthy, Gain, and Noise columns represent false alarms under nominal operation and acquisition disturbances; Drag and Imbalance columns represent detections under the corresponding mechanical interventions. Results are separated by AC and DC motor profile and detector.}
+\includegraphics[width=0.91\textwidth]{\figpath/Fig3.png}
+\caption{Alarm counts for matched controlled operating cases. Each heatmap cell reports alarms among 72 observations. Healthy, Gain, and Noise columns represent false alarms under nominal operation and acquisition disturbances; Drag and Imbalance columns represent detections under the corresponding mechanical interventions. Results are separated by AC and DC motor profile and detector}
 \label{fig:synthetic}
 \end{figure*}
 
@@ -304,8 +314,8 @@ Figure~\ref{fig:ottawa} and Table~\ref{tab:ottawa} report recording level decisi
 
 \begin{figure*}[t]
 \centering
-\includegraphics[width=0.88\textwidth]{\figpath/rId30.png}
-\caption{Recording level alarm rates obtained from the University of Ottawa bearing vibration data. The matched load comparison contains 20 healthy recordings, 13 developing fault recordings, and 13 fully faulty recordings. The healthy bar represents the false alarm rate; the developing and fully faulty bars represent detection rates. Unloaded ball fault recordings are analysed separately and are excluded from this comparison.}
+\includegraphics[width=0.88\textwidth]{\figpath/Fig4.png}
+\caption{Recording level alarm rates obtained from the University of Ottawa bearing vibration data. The matched load comparison contains 20 healthy recordings, 13 developing fault recordings, and 13 fully faulty recordings. The healthy bar represents the false alarm rate; the developing and fully faulty bars represent detection rates. Unloaded ball fault recordings are analysed separately and are excluded from this comparison}
 \label{fig:ottawa}
 \end{figure*}
 
@@ -392,7 +402,9 @@ SparkSense addresses a practical electrical engineering problem in mixed motor f
 
 \textbf{Competing interests.} The authors declare that they have no competing financial or nonfinancial interests relevant to this work.
 
-\textbf{Author contributions.} K. Rajeswari supervised the study, reviewed the methodology, and revised the manuscript. S. Shrikanth developed the SparkSense concept, implemented the computational study, analysed the results, and prepared the manuscript. R. Mageshwar contributed to system development, validation review, and manuscript revision. All authors reviewed and approved the submitted version.
+\textbf{Author contributions.} K. Rajeswari provided supervision, methodology guidance, validation oversight, and critical review of the manuscript. S. Shrikanth led the SparkSense concept, computational implementation, formal analysis, and preparation of the original manuscript. R. Mageshwar led the system architecture review, data curation, independent verification of results, figure preparation, and manuscript revision. S. Shrikanth and R. Mageshwar contributed equally to the investigation, interpretation, and final presentation of the work. All authors verified the reported results, reviewed the complete manuscript, and approved the submitted version.
+
+\textbf{Use of generative artificial intelligence and authoring tools.} ChatGPT was used only for AI assisted copy editing and manuscript formatting. Overleaf was used for LaTeX editing, compilation, and collaborative manuscript preparation. The research design, computational work, data selection, numerical verification, interpretation, and final decisions were completed and approved by the authors, who accept full responsibility for the manuscript.
 
 \textbf{Data availability.} The University of Ottawa recordings are available through Mendeley Data, version 5, at \url{https://doi.org/10.17632/y2px5tg92h.5} \cite{sehri2023dataset}. The supplementary research package contains the generator and replay code, parameters, virtual unit assignments, recording level decisions, and plotting scripts. Raw Ottawa recordings are not redistributed. No new physical measurements were collected for this study.
 
@@ -401,22 +413,22 @@ SparkSense addresses a practical electrical engineering problem in mixed motor f
 \textbf{Consent for publication.} Not applicable.
 
 \begin{thebibliography}{16}
-\bibitem{wheat2024} L. Wheat, M. von Mohrenschildt, S. R. Habibi, and D. Al Ani, ``Impact of data leakage in vibration signals used for bearing fault diagnosis,'' \emph{IEEE Access}, vol. 12, pp. 169879 to 169895, 2024, \url{https://doi.org/10.1109/ACCESS.2024.3497716}.
-\bibitem{jacob2018} B. Jacob \emph{et al.}, ``Quantization and training of neural networks for efficient integer arithmetic only inference,'' in \emph{Proc. IEEE Conf. Computer Vision and Pattern Recognition}, 2018, pp. 2704 to 2713, \url{https://doi.org/10.1109/CVPR.2018.00286}.
-\bibitem{arciniegas2025} S. Arciniegas \emph{et al.}, ``IoT device for detecting abnormal vibrations in motors using TinyML,'' \emph{Discover Internet of Things}, vol. 5, art. 41, 2025, \url{https://doi.org/10.1007/s43926-025-00142-4}.
-\bibitem{lei2020} Y. Lei, B. Yang, X. Jiang, F. Jia, N. Li, and A. K. Nandi, ``Applications of machine learning to machine fault diagnosis: A review and roadmap,'' \emph{Mechanical Systems and Signal Processing}, vol. 138, art. 106587, 2020, \url{https://doi.org/10.1016/j.ymssp.2019.106587}.
-\bibitem{iso20816} International Organization for Standardization, ``Mechanical vibration: Measurement and evaluation of machine vibration, Part 1: General guidelines,'' ISO 20816 1:2016, Geneva, Switzerland, 2016.
-\bibitem{warden2019} P. Warden and D. Situnayake, \emph{TinyML: Machine Learning with TensorFlow Lite on Arduino and Ultra Low Power Microcontrollers}. Sebastopol, CA, USA: O'Reilly Media, 2019.
-\bibitem{breiman2001} L. Breiman, ``Random forests,'' \emph{Machine Learning}, vol. 45, no. 1, pp. 5 to 32, 2001, \url{https://doi.org/10.1023/A:1010933404324}.
-\bibitem{adxl355} Analog Devices, ``ADXL354 and ADXL355 data sheet,'' rev. D, 2021. [Online]. Available: \url{https://www.analog.com/media/en/technical-documentation/data-sheets/adxl354_adxl355.pdf}.
-\bibitem{sehri2023data} M. Sehri, P. Dumond, and M. Bouchard, ``University of Ottawa constant load and speed rolling element bearing vibration and acoustic fault signature datasets,'' \emph{Data in Brief}, vol. 49, art. 109327, 2023, \url{https://doi.org/10.1016/j.dib.2023.109327}.
-\bibitem{sehri2023dataset} M. Sehri and P. Dumond, ``University of Ottawa UORED VAFCLS bearing dataset,'' version 5, Mendeley Data, 2023, \url{https://doi.org/10.17632/y2px5tg92h.5}.
-\bibitem{gangsar2020} P. Gangsar and R. Tiwari, ``Signal based condition monitoring techniques for fault detection and diagnosis of induction motors: A state of the art review,'' \emph{Mechanical Systems and Signal Processing}, vol. 144, art. 106908, 2020, \url{https://doi.org/10.1016/j.ymssp.2020.106908}.
-\bibitem{zhao2019} R. Zhao, R. Yan, Z. Chen, K. Mao, P. Wang, and R. X. Gao, ``Deep learning and its applications to machine health monitoring,'' \emph{Mechanical Systems and Signal Processing}, vol. 115, pp. 213 to 237, 2019, \url{https://doi.org/10.1016/j.ymssp.2018.05.050}.
-\bibitem{david2021} R. David \emph{et al.}, ``TensorFlow Lite Micro: Embedded machine learning for TinyML systems,'' in \emph{Proceedings of Machine Learning and Systems}, vol. 3, pp. 800 to 811, 2021.
-\bibitem{harris1978} F. J. Harris, ``On the use of windows for harmonic analysis with the discrete Fourier transform,'' \emph{Proceedings of the IEEE}, vol. 66, no. 1, pp. 51 to 83, 1978, \url{https://doi.org/10.1109/PROC.1978.10837}.
-\bibitem{kannan2024} V. Kannan, D. V. Dao, and H. Li, ``Detection of signal integrity issues in vibration monitoring using one class support vector machine,'' \emph{Journal of Vibration Engineering \& Technologies}, vol. 12, suppl. 1, pp. 601--611, 2024, \url{https://doi.org/10.1007/s42417-024-01435-8}.
-\bibitem{magadan2023} L. Magadán, F. J. Suárez, J. C. Granda, and D. F. García, ``Low cost industrial IoT system for wireless monitoring of electric motors condition,'' \emph{Mobile Networks and Applications}, vol. 28, pp. 97--106, 2023, \url{https://doi.org/10.1007/s11036-022-02017-2}.
+\bibitem{wheat2024} Wheat L, von Mohrenschildt M, Habibi SR, Al Ani D (2024) Impact of data leakage in vibration signals used for bearing fault diagnosis. IEEE Access 12:169879--169895. \url{https://doi.org/10.1109/ACCESS.2024.3497716}
+\bibitem{jacob2018} Jacob B, Kligys S, Chen B et al (2018) Quantization and training of neural networks for efficient integer arithmetic only inference. In: Proceedings of the IEEE Conference on Computer Vision and Pattern Recognition, pp 2704--2713. \url{https://doi.org/10.1109/CVPR.2018.00286}
+\bibitem{arciniegas2025} Arciniegas S et al (2025) IoT device for detecting abnormal vibrations in motors using TinyML. Discov Internet Things 5:41. \url{https://doi.org/10.1007/s43926-025-00142-4}
+\bibitem{lei2020} Lei Y, Yang B, Jiang X, Jia F, Li N, Nandi AK (2020) Applications of machine learning to machine fault diagnosis: a review and roadmap. Mech Syst Signal Process 138:106587. \url{https://doi.org/10.1016/j.ymssp.2019.106587}
+\bibitem{iso20816} International Organization for Standardization (2016) Mechanical vibration: measurement and evaluation of machine vibration, part 1: general guidelines. ISO 20816-1:2016, Geneva
+\bibitem{warden2019} Warden P, Situnayake D (2019) TinyML: machine learning with TensorFlow Lite on Arduino and ultra low power microcontrollers. O'Reilly Media, Sebastopol
+\bibitem{breiman2001} Breiman L (2001) Random forests. Mach Learn 45:5--32. \url{https://doi.org/10.1023/A:1010933404324}
+\bibitem{adxl355} Analog Devices (2021) ADXL354 and ADXL355 data sheet, revision D. \url{https://www.analog.com/media/en/technical-documentation/data-sheets/adxl354_adxl355.pdf}. Accessed 3 November 2026
+\bibitem{sehri2023data} Sehri M, Dumond P, Bouchard M (2023) University of Ottawa constant load and speed rolling element bearing vibration and acoustic fault signature datasets. Data Brief 49:109327. \url{https://doi.org/10.1016/j.dib.2023.109327}
+\bibitem{sehri2023dataset} Sehri M, Dumond P (2023) University of Ottawa UORED VAFCLS bearing dataset, version 5. Mendeley Data. \url{https://doi.org/10.17632/y2px5tg92h.5}
+\bibitem{gangsar2020} Gangsar P, Tiwari R (2020) Signal based condition monitoring techniques for fault detection and diagnosis of induction motors: a state of the art review. Mech Syst Signal Process 144:106908. \url{https://doi.org/10.1016/j.ymssp.2020.106908}
+\bibitem{zhao2019} Zhao R, Yan R, Chen Z, Mao K, Wang P, Gao RX (2019) Deep learning and its applications to machine health monitoring. Mech Syst Signal Process 115:213--237. \url{https://doi.org/10.1016/j.ymssp.2018.05.050}
+\bibitem{david2021} David R et al (2021) TensorFlow Lite Micro: embedded machine learning for TinyML systems. Proc Mach Learn Syst 3:800--811
+\bibitem{harris1978} Harris FJ (1978) On the use of windows for harmonic analysis with the discrete Fourier transform. Proc IEEE 66:51--83. \url{https://doi.org/10.1109/PROC.1978.10837}
+\bibitem{kannan2024} Kannan V, Dao DV, Li H (2024) Detection of signal integrity issues in vibration monitoring using one class support vector machine. J Vib Eng Technol 12(Suppl 1):601--611. \url{https://doi.org/10.1007/s42417-024-01435-8}
+\bibitem{magadan2023} Magadán L, Suárez FJ, Granda JC, García DF (2023) Low cost industrial IoT system for wireless monitoring of electric motors condition. Mob Netw Appl 28:97--106. \url{https://doi.org/10.1007/s11036-022-02017-2}
 \end{thebibliography}
 
 \end{document}
