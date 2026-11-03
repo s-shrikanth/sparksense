@@ -48,16 +48,19 @@
 \begin{@twocolumnfalse}
 \begin{center}
 {\fontsize{19}{21}\selectfont SparkSense: Motor Profile Guided Edge Anomaly Detection for AC and DC Motor Condition Monitoring under Operating and Sensor Variability\par}
-\vspace{0.16in}
-{\large\textbf{K. Rajeswari}$^{*}$\quad \textbf{S. Shrikanth}\quad \textbf{R. Mageshwar}\par}
-\vspace{0.04in}
-{\small rajeswari@msec.edu.in\quad 311523105043@msec.edu.in\quad 311523105023@msec.edu.in\par}
-\vspace{0.03in}
-{\small Associate Professor\quad Final Year B.E. EEE Student\quad Final Year B.E. EEE Student\par}
-\vspace{0.03in}
+\vspace{0.12in}
+{\large\textbf{K. Rajeswari}$^{*}$\par}
+{\small Associate Professor, rajeswari@msec.edu.in\par}
+\vspace{0.025in}
+{\large\textbf{S. Shrikanth}$^{1}$\par}
+{\small Final Year B.E. EEE Student, 311523105043@msec.edu.in\par}
+\vspace{0.025in}
+{\large\textbf{R. Mageshwar}$^{2}$\par}
+{\small Final Year B.E. EEE Student, 311523105023@msec.edu.in\par}
+\vspace{0.035in}
 {\small Department of Electrical and Electronics Engineering, Meenakshi Sundararajan Engineering College, Chennai, Tamil Nadu 600119, India\par}
-{\small $^{*}$Corresponding author\par}
-\vspace{0.10in}
+{\small $^{*}$Corresponding author. $^{1,2}$Final year undergraduate authors.\par}
+\vspace{0.08in}
 \end{center}
 \end{@twocolumnfalse}
 ]
@@ -74,7 +77,7 @@ SparkSense was originally proposed as a multimodal node with vibration, electric
 
 Motor fault diagnosis studies can report optimistic performance when correlated records from the same bearing or operating run enter both training and testing partitions \cite{wheat2024}. Integer quantization reduces model storage and can enable efficient inference, but it does not establish fault causality \cite{jacob2018}. Recent TinyML motor monitors demonstrate that embedded vibration inference is feasible in controlled tests \cite{arciniegas2025}, while broader reviews emphasize the continuing importance of domain shift, operating condition, and independent validation \cite{lei2020}.
 
-This paper makes five contributions. First, it defines separate induction and series DC profiles and exposes the assumptions used to generate their electrical and mechanical states. Second, it compares a simple RMS threshold, floating and integer autoencoders, and a load conditioned harmonic comparator under matched disturbances. Third, it uses bearing identity based partitions for independently collected vibration recordings. Fourth, it tests the local event queue during a simulated outage. Fifth, it translates the evidence into an explicit application boundary, target user profile, commissioning plan, and budgeted product development route. The analysis distinguishes software evidence from physical device evidence and reports counts with their denominators instead of a single pooled accuracy.
+This paper makes five contributions. First, it defines separate induction and series DC profiles and exposes the assumptions used to generate their electrical and mechanical states. Second, it compares a simple RMS threshold, floating and integer autoencoders, and a load conditioned harmonic comparator under matched disturbances. Third, it uses bearing identity based partitions for independently collected vibration recordings. Fourth, it tests the local event queue during a simulated outage. Fifth, it translates the evidence into a four state operational policy, an explicit application boundary, a target user profile, a commissioning plan, and a budgeted product development route. The analysis distinguishes software evidence from physical device evidence and reports counts with their denominators instead of a single pooled accuracy.
 
 The investigation is organized around four research questions. RQ1 asks whether a detector trained on healthy observations preserves specificity when the same motor operates at different commanded loads. RQ2 asks whether profile specific routing changes the balance between healthy false alarms and simulated fault sensitivity. RQ3 asks whether integer quantization preserves decisions produced by the floating model. RQ4 asks whether conclusions drawn from the controlled generator remain visible when the vibration path is replayed with recordings obtained from an independent test rig. These questions are narrower than complete predictive maintenance because no remaining useful life is estimated and no maintenance intervention is predicted.
 
@@ -210,6 +213,21 @@ S(\vect{z})=\frac{1}{5}\lVert\vect{z}-\hat{\vect{z}}\rVert_2^2>\tau .
 The threshold is the larger empirical 95th percentile from separate healthy calibration groups. Shared and profile specific models are compared with a simple upper vibration RMS threshold. In the host quantizer, weights and input and hidden activations use signed eight bit values, while matrix products accumulate in 32 bit integers. Biases use accumulator units. Scale application and final scoring remain floating point. TensorFlow Lite Micro is a suitable deployment runtime \cite{david2021}, but no claim is made here for its timing, SRAM, power, or numerical equivalence on the proposed board.
 
 A remote Random Forest with 80 trees is trained separately for each motor profile on labelled synthetic healthy, drag, and imbalance cases \cite{breiman2001}. It is evaluated on every nominal test example. Its confusion matrix therefore measures standalone generator classification, not complete alert recall. The AI4I dataset is not used because its tabular labels do not match the waveform inputs or motor states evaluated here.
+
+\subsection{Operational decision policy}
+A deployable monitor needs more than an anomaly threshold because invalid acquisition and operation outside the commissioned domain can produce large scores. SparkSense therefore specifies four mutually exclusive output states: valid normal, valid anomaly, sensor or acquisition issue, and outside commissioned operation. Let $q_t$ be one only when sampling continuity, clipping, sensor range, and required context checks pass for window $t$. Let $c_t$ be the current load and speed cell, and let $\mathcal{C}_p$ be the commissioned cells for motor profile $p$. The valid anomaly indicator is
+\begin{equation}
+a_t=\mathbb{1}\!\left[q_t=1,\ c_t\in\mathcal{C}_p,\ S(\vect{z}_t)>\tau_{p,c_t}\right].
+\label{eq:policy}
+\end{equation}
+If $q_t=0$, the event is labelled as an acquisition issue rather than a motor fault. If $c_t\notin\mathcal{C}_p$, SparkSense abstains and requests additional healthy commissioning data. Only a valid window inside the commissioned domain can be labelled normal or anomalous.
+
+An operational alert may require $m$ anomalous decisions among the most recent $n$ valid windows:
+\begin{equation}
+E_t=\mathbb{1}\!\left[\sum_{j=0}^{n-1}a_{t-j}\ge m\right].
+\label{eq:persistence}
+\end{equation}
+The pair $(m,n)$ controls persistence and latency and must be fixed using time ordered pilot data. It is not selected from the balanced cases reported here. Every event record retains $q_t$, $c_t$, the score, threshold, model version, and reason code so that an alert can be audited. This policy is a software specification derived from the observed disturbance failures; its field effectiveness remains to be measured.
 
 \subsection{Partitions and uncertainty}
 For each profile, 12 virtual units supply fitting data, 8 different units supply healthy calibration, and 12 further units supply test cases. Three loads and two repeats produce 72 test cases for each state and profile. Unit parameters remain fixed across records. Counts are descriptive because 72 records represent repeated measurements from 12 virtual units, not 72 independent machines. Block bootstrap intervals resample the 12 test units and hold fitted weights fixed.
