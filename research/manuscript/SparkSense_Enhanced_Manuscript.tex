@@ -42,7 +42,7 @@
 \twocolumn[
 \begin{@twocolumnfalse}
 \begin{center}
-{\fontsize{19}{21}\selectfont SparkSense: Disturbance Aware Motor Profile Guided Edge Anomaly Detection for AC and DC Motor Condition Monitoring\par}
+{\fontsize{19}{21}\selectfont SparkSense: Motor Profile Guided Edge Anomaly Detection for AC and DC Motor Condition Monitoring under Operating and Sensor Variability\par}
 \vspace{0.12in}
 {\large\textbf{K. Rajeswari}$^{*}$\par}
 {\small Associate Professor, rajeswari@msec.edu.in\par}
@@ -137,7 +137,7 @@ SparkSense assigns each asset a nameplate profile and makes the first alarm deci
 \begin{figure}[t]
 \centering
 \includegraphics[width=\columnwidth]{\figpath/rId22.png}
-\caption{Functional architecture of SparkSense. The motor profile selects the applicable electrical and mechanical context before local feature extraction and anomaly scoring. The event queue retains decisions during a communication outage and forwards them after reconnection. Solid functional blocks represent the proposed system; quantitative evaluation in this study covers the simulated signal path and the host based queue policy.}
+\caption{SparkSense functional architecture. The selected motor profile determines the electrical and mechanical context used for local feature extraction and anomaly evaluation. Time stamped event records are retained during communication outages and forwarded after connectivity is restored. Quantitative evaluation covers the controlled motor profile processing path and the host implemented event queue.}
 \label{fig:architecture}
 \end{figure}
 
@@ -146,7 +146,7 @@ The laboratory breadboard in Fig.~\ref{fig:prototype} records an early stage of 
 \begin{figure}[t]
 \centering
 \includegraphics[width=0.92\columnwidth]{\figpath/image1.png}
-\caption{SparkSense laboratory prototype during early integration. The breadboard combines the controller, interface wiring, and indicator hardware shown in the development video. Quantitative results reported in this paper are obtained from the stated simulations and independent vibration recordings rather than from this photograph.}
+\caption{SparkSense laboratory breadboard assembled during preliminary system integration. The arrangement includes the controller, sensing interfaces, storage connection, and status indicators. The photograph documents the prototype architecture; the quantitative results are derived from the controlled motor profile evaluation and independently measured vibration recordings described in Section~5.}
 \label{fig:prototype}
 \end{figure}
 
@@ -293,7 +293,7 @@ The results also define what additional healthy data would be valuable. Repeatin
 \begin{figure*}[t]
 \centering
 \includegraphics[width=0.91\textwidth]{\figpath/rId27.png}
-\caption{Alarm counts for matched simulated operating cases. Each cell contains the number of alarms among 72 observations. Columns labelled Healthy, Gain, and Noise quantify false alarms, while Drag and Imbalance quantify detection under the imposed interventions. The figure shows why disturbance tests must be reported together with fault sensitivity.}
+\caption{Alarm counts for matched controlled operating cases. Each heatmap cell reports alarms among 72 observations. Healthy, Gain, and Noise columns represent false alarms under nominal operation and acquisition disturbances; Drag and Imbalance columns represent detections under the corresponding mechanical interventions. Results are separated by AC and DC motor profile and detector.}
 \label{fig:synthetic}
 \end{figure*}
 
@@ -305,7 +305,7 @@ Figure~\ref{fig:ottawa} and Table~\ref{tab:ottawa} report recording level decisi
 \begin{figure*}[t]
 \centering
 \includegraphics[width=0.88\textwidth]{\figpath/rId30.png}
-\caption{Recording level decisions obtained from the University of Ottawa vibration replay. The healthy group contains 20 recordings and the developing and fully faulty groups contain 13 recordings each at matched load. Healthy percentages are false alarm rates. Fault percentages are detection rates. The unloaded ball fault group is evaluated separately and is not included in these bars.}
+\caption{Recording level alarm rates obtained from the University of Ottawa bearing vibration data. The matched load comparison contains 20 healthy recordings, 13 developing fault recordings, and 13 fully faulty recordings. The healthy bar represents the false alarm rate; the developing and fully faulty bars represent detection rates. Unloaded ball fault recordings are analysed separately and are excluded from this comparison.}
 \label{fig:ottawa}
 \end{figure*}
 
