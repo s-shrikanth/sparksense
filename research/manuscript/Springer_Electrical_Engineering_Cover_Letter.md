@@ -1,6 +1,6 @@
 Dear Editor in Chief,
 
-Please consider our manuscript, “Operating and Sensor Variability in Motor Condition Monitoring: SparkSense Motor Profile Guided Edge Anomaly Detection for AC and DC Motors,” for publication in Electrical Engineering.
+Please consider our manuscript, “SparkSense: Addressing Operating and Sensor Variability with Motor Profile Guided Edge Anomaly Detection for AC and DC Motor Condition Monitoring,” for publication in Electrical Engineering.
 
 The manuscript addresses a practical condition monitoring problem in mixed motor fleets: changes caused by motor condition, normal operation, and acquisition disturbance can produce similar signal amplitudes. SparkSense combines AC and DC motor profiles, current and speed context, vibration features, acquisition validity checks, commissioned operating cells, local persistence, and outage tolerant event records. The contribution is a disturbance aware engineering framework that defines when an edge monitor can issue a valid condition alert and when it must report an acquisition problem or abstain.
 
